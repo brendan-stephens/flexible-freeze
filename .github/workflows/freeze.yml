@@ -1,7 +1,7 @@
 name: Flexible Freeze
 
-workflow_dispatch:
 on:
+workflow_dispatch:
   schedule:
     - cron: '0 4 * * *' # Run at 4 AM UTC daily
 
@@ -10,16 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - run: pip install psycopg2-binary
+          
+      - name: Install Dependencies
+        run: pip install psycopg2-binary
+
       - name: Run Flexible Freeze
+        # CRITICAL FIX: Mapping secrets to the variables the script expects
         env:
-          DB_CONNECTION: ${{ secrets.DATABASE_URL }}
+          DBUSER: ${{ secrets.DB_USER }}
+          DBHOST: ${{ secrets.DB_HOST }}
+          DBPASS: ${{ secrets.DB_PASS }} 
         run: |
-           # usage: flexible_freeze.py [-h] [-m RUN_MIN] [-s MINSIZEMB] [-d DBLIST] [-T TABLES_TO_EXCLUDE]
-           # [--exclude-table-in-database EXCLUDE_TABLE_IN_DATABASE] [--no-freeze] [--no-analyze] [--vacuum]
-           # [--pause PAUSE_TIME] [--freezeage FREEZEAGE] [--costdelay COSTDELAY] [--costlimit COSTLIMIT] [-t]
-           # [--enforce-time] [-l LOGFILE] [-v] [--debug] [-U DBUSER] [-H DBHOST] [-p DBPORT] [-w DBPASS] [-st TABLE]
-           python scripts/flexible_freeze.py -U "$DBUSER" -H "$DBHOST" -w "$DBPASS" -m 60 --enforce-time -t
+           python scripts/flexible_freeze.py \
+             -U "$DBUSER" \
+             -H "$DBHOST" \
+             -w "$DBPASS" \
+             -m 60 \
+             --enforce-time
+
