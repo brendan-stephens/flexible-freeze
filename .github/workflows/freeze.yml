@@ -1,5 +1,6 @@
 name: Flexible Freeze
 
+workflow_dispatch:
 on:
   schedule:
     - cron: '0 4 * * *' # Run at 4 AM UTC daily
@@ -17,10 +18,8 @@ jobs:
         env:
           DB_CONNECTION: ${{ secrets.DATABASE_URL }}
         run: |
-           # Adjust arguments as needed
+           # usage: flexible_freeze.py [-h] [-m RUN_MIN] [-s MINSIZEMB] [-d DBLIST] [-T TABLES_TO_EXCLUDE]
+           # [--exclude-table-in-database EXCLUDE_TABLE_IN_DATABASE] [--no-freeze] [--no-analyze] [--vacuum]
+           # [--pause PAUSE_TIME] [--freezeage FREEZEAGE] [--costdelay COSTDELAY] [--costlimit COSTLIMIT] [-t]
+           # [--enforce-time] [-l LOGFILE] [-v] [--debug] [-U DBUSER] [-H DBHOST] [-p DBPORT] [-w DBPASS] [-st TABLE]
            python scripts/flexible_freeze.py -U "$DBUSER" -H "$DBHOST" -w "$DBPASS" -m 60 --enforce-time -t
-
-# usage: flexible_freeze.py [-h] [-m RUN_MIN] [-s MINSIZEMB] [-d DBLIST] [-T TABLES_TO_EXCLUDE]
-                          # [--exclude-table-in-database EXCLUDE_TABLE_IN_DATABASE] [--no-freeze] [--no-analyze] [--vacuum]
-                          # [--pause PAUSE_TIME] [--freezeage FREEZEAGE] [--costdelay COSTDELAY] [--costlimit COSTLIMIT] [-t]
-                          # [--enforce-time] [-l LOGFILE] [-v] [--debug] [-U DBUSER] [-H DBHOST] [-p DBPORT] [-w DBPASS] [-st TABLE]
