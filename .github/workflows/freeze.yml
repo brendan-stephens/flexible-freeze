@@ -25,10 +25,5 @@ jobs:
           DBHOST: ${{ secrets.DB_HOST }}
           DBPASS: ${{ secrets.DB_PASS }} 
         run: |
-           python scripts/flexible_freeze.py \
-             -U "$DBUSER" \
-             -H "$DBHOST" \
-             -w "$DBPASS" \
-             -m 60 \
-             --enforce-time
+           python scripts/flexible_freeze.py -U "$DBUSER" -H "$DBHOST" -w "$DBPASS" -m 60 --enforce-time
 
