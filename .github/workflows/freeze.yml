@@ -19,16 +19,12 @@ jobs:
         run: pip install psycopg2-binary
 
       - name: Run Flexible Freeze
-        # CRITICAL FIX: Mapping secrets to the variables the script expects
+        # Map secrets to variables
         env:
-          DBUSER: ${{ secrets.DB_USER }}
-          DBHOST: ${{ secrets.DB_HOST }}
-          DBPASS: ${{ secrets.DB_PASS }} 
+          DBUSER: ${{ secrets.DBUSER }}
+          DBHOST: ${{ secrets.DBHOST }}
+          DBPASS: ${{ secrets.DBPASS }} 
         run: |
-           echo "::debug::DBUSER len=${#DBUSER}"
-           echo "::debug::DBHOST len=${#DBHOST}"
-           echo "::debug::DBPASS len=${#DBPASS}"
-           
            python scripts/flexible_freeze.py \
              -U "$DBUSER" \
              -H "$DBHOST" \
