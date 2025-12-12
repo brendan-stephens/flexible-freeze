@@ -29,6 +29,7 @@ jobs:
              -U "$DBUSER" \
              -H "$DBHOST" \
              -w "$DBPASS" \
+             -d postgres \
              -m 60 \
              --enforce-time
 
